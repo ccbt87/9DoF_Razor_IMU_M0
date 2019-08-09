@@ -5,6 +5,29 @@ then
     stty -F /dev/ttyACM0 115200
 fi
 
+function change_rate {
+    re="^IMU rate set to ([0-9]{1,3}) Hz"
+    echo -e '\x72' > /dev/ttyACM0
+    while read line
+    do
+        if [[ $line =~ $re ]]
+        then
+            if [[ $rate -eq ${BASH_REMATCH[1]} ]]
+            then
+                break
+            else
+                echo -e '\x72' > /dev/ttyACM0
+            fi
+        fi
+    done < /dev/ttyACM0
+}
+
+#rate=100
+if [[ -n $rate ]]
+then
+    change_rate
+fi
+
 file="raw$(date +%s)"
 
 > $file
