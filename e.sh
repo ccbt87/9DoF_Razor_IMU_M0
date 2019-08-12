@@ -22,15 +22,16 @@ function change_rate {
     done < /dev/ttyACM0
 }
 
-#rate=100
+rates=(1 10 20 30 40 50 60 70 80 90 100)
+#rate=${rates[10]}
 if [[ -n $rate ]]
 then
     change_rate
 fi
 
-file="raw$(date +%s)"
+file="raw.log"
 
-> $file
+echo $(date +%s%3N) > $file
 
 function check_output {
     sleep 1
